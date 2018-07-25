@@ -21,11 +21,18 @@ class Song < ActiveRecord::Base
   end
 
   def note_contents
-    self.notes.map do |note|
-      if note.content.strip != "" && note.content != nil
+    self.notes.select{|i| i.content.strip != ''}.map do |note|
       note.content
-      end
     end
+  end
+
+  def genre_name=(genre)
+    self.genre = Genre.find_or_create_by(name: genre)
+    self.save
+  end
+
+  def genre_name
+    self.genre ? self.genre.name : nil
   end
 
 end
